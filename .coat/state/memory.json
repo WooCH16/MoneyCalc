@@ -8,5 +8,6 @@
     "속도": 0
   },
   "team": [],
+  "architecture": "MVVM + Zustand",
   "updatedAt": "2026-04-10"
 }
