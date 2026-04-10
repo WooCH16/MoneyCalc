@@ -1,0 +1,15 @@
+{
+  "github": {
+    "enabled": false,
+    "repo": "",
+    "auto_issue": true,
+    "auto_branch": true,
+    "auto_pr": true
+  },
+  "align": {
+    "기능": 97,
+    "UX": 85,
+    "속도": 80
+  },
+  "loop_min_rounds": 12
+}

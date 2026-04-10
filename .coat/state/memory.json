@@ -1,0 +1,12 @@
+{
+  "feature": "급여자동계산기",
+  "phase": "plan",
+  "round": 0,
+  "matchRate": {
+    "기능": 0,
+    "UX": 0,
+    "속도": 0
+  },
+  "team": [],
+  "updatedAt": "2026-04-10"
+}
