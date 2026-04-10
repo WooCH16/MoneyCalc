@@ -45,14 +45,17 @@ export function YearEndTaxScreen() {
 
       {tab === 'monthly' && (
         <View style={styles.section}>
-          <Text style={styles.hint}>각 월의 총급여(세전)와 납부세액을 입력하세요.</Text>
+          <Text style={styles.hint}>
+            각 월의 총급여(세전)와 납부세액을 입력하세요.{'\n'}
+            💡 납부세액 = 급여명세서의 소득세 + 지방소득세 합계
+          </Text>
           {MONTHS.map((label, i) => (
             <View key={i} style={styles.monthRow}>
               <Text style={styles.monthLabel}>{label}</Text>
               <View style={styles.monthInputs}>
                 <View style={styles.monthField}>
                   <InputField
-                    label="총급여"
+                    label="총급여 (세전)"
                     value={String(input.monthlyNetSalaries[i] || '')}
                     onChangeText={(v) => setMonthlyData(i, Number(v), input.monthlyTaxPaid[i])}
                     suffix="원"

@@ -55,7 +55,19 @@ function TabNavigator() {
         name="Home"
         options={{ tabBarLabel: '홈', tabBarIcon: ({ focused }) => <TabIcon emoji="🏠" focused={focused} /> }}
       >
-        {(props) => <HomeScreen onNavigate={(screen) => props.navigation.navigate(screen)} />}
+        {(props) => (
+          <HomeScreen
+            onNavigate={(screen) => {
+              // Tab 화면은 tab navigate, Stack 화면은 상위 Stack으로 올라가서 navigate
+              const tabScreens = ['Calculator', 'Schedule', 'Settings'];
+              if (tabScreens.includes(screen)) {
+                props.navigation.navigate(screen as never);
+              } else {
+                props.navigation.getParent()?.navigate(screen as never);
+              }
+            }}
+          />
+        )}
       </Tab.Screen>
       <Tab.Screen
         name="Schedule"
