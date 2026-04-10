@@ -10,6 +10,7 @@ import { ScheduleScreen } from '../screens/ScheduleScreen';
 import { DayDetailScreen } from '../screens/DayDetailScreen';
 import { UnemploymentScreen } from '../screens/UnemploymentScreen';
 import { SeveranceScreen } from '../screens/SeveranceScreen';
+import { YearEndTaxScreen } from '../screens/YearEndTaxScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 
 const Tab = createBottomTabNavigator();
@@ -83,6 +84,8 @@ export function AppNavigator() {
         <Stack.Screen name="Unemployment" component={UnemploymentScreen}
           options={{ presentation: 'modal' }} />
         <Stack.Screen name="Severance" component={SeveranceScreen}
+          options={{ presentation: 'modal' }} />
+        <Stack.Screen name="YearEndTax" component={YearEndTaxScreen}
           options={{ presentation: 'modal' }} />
       </Stack.Navigator>
     </NavigationContainer>
