@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { DayWork } from '../../utils/types';
 import { formatTime } from '../../utils/formatters';
@@ -26,7 +26,7 @@ const TYPE_LABELS: Record<string, string> = {
   holiday:      '휴일',
 };
 
-export function DayCell({ date, day, dayOfWeek, work, isToday, isCurrentMonth, use24Hour, onPress }: Props) {
+export const DayCell = memo(function DayCell({ date, day, dayOfWeek, work, isToday, isCurrentMonth, use24Hour, onPress }: Props) {
   const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
   const hasWork = work && work.type !== 'off';
   const color = hasWork ? TYPE_COLORS[work.type] ?? '#1a73e8' : undefined;
@@ -69,7 +69,7 @@ export function DayCell({ date, day, dayOfWeek, work, isToday, isCurrentMonth, u
       )}
     </TouchableOpacity>
   );
-}
+});
 
 const styles = StyleSheet.create({
   cell: {

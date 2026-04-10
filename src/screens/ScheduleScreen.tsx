@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
 } from 'react-native';
@@ -91,14 +91,19 @@ export function ScheduleScreen({ onDayPress }: Props) {
   const todayStr = today.toISOString().slice(0, 10);
   const weeks = Array.from({ length: 6 }, (_, i) => cells.slice(i * 7, i * 7 + 7));
 
-  function prevMonth() {
+  const prevMonth = useCallback(() => {
     if (month === 0) { setYear(y => y - 1); setMonth(11); }
     else setMonth(m => m - 1);
-  }
-  function nextMonth() {
+  }, [month]);
+
+  const nextMonth = useCallback(() => {
     if (month === 11) { setYear(y => y + 1); setMonth(0); }
     else setMonth(m => m + 1);
-  }
+  }, [month]);
+
+  const handleDayPress = useCallback((date: string) => {
+    onDayPress?.(date);
+  }, [onDayPress]);
 
   return (
     <ScrollView style={styles.container}>
@@ -138,29 +143,40 @@ export function ScheduleScreen({ onDayPress }: Props) {
                 isToday={cell.date === todayStr}
                 isCurrentMonth={cell.isCurrentMonth}
                 use24Hour={use24Hour}
-                onPress={(date) => onDayPress?.(date)}
+                onPress={handleDayPress}
               />
             ))}
           </View>
         ))}
       </View>
 
+      {/* 빈 달력 안내 */}
+      {Object.keys(schedule).length === 0 && (
+        <View style={styles.emptyBox}>
+          <Text style={styles.emptyIcon}>📅</Text>
+          <Text style={styles.emptyText}>날짜를 탭하여 근무 일정을 입력하세요</Text>
+          <Text style={styles.emptyHint}>출퇴근 시간, 연차, 조퇴를 기록하면{'\n'}자동으로 급여를 계산합니다</Text>
+        </View>
+      )}
+
       {/* 월 요약 */}
-      <View style={styles.summary}>
-        <Text style={styles.summaryTitle}>{month + 1}월 근무 요약</Text>
-        <View style={styles.summaryGrid}>
-          <SummaryItem label="총 근무" value={formatMinutes(result.totalMinutes)} />
-          <SummaryItem label="연장근로" value={formatMinutes(result.overtimeMinutes)} accent />
-          <SummaryItem label="야간근로" value={formatMinutes(result.nightMinutes)} accent />
-          <SummaryItem label="주휴수당" value={`${result.holidayPayDays}주`} />
-          <SummaryItem label="연차" value={`${result.annualLeaveDays}일`} />
-          <SummaryItem label="예상 급여" value={`${formatCurrency(result.grossWage)}원`} highlight />
+      {Object.keys(schedule).length > 0 && (
+        <View style={styles.summary}>
+          <Text style={styles.summaryTitle}>{month + 1}월 근무 요약</Text>
+          <View style={styles.summaryGrid}>
+            <SummaryItem label="총 근무" value={formatMinutes(result.totalMinutes)} />
+            <SummaryItem label="연장근로" value={formatMinutes(result.overtimeMinutes)} accent />
+            <SummaryItem label="야간근로" value={formatMinutes(result.nightMinutes)} accent />
+            <SummaryItem label="주휴수당" value={`${result.holidayPayDays}주`} />
+            <SummaryItem label="연차" value={`${result.annualLeaveDays}일`} />
+            <SummaryItem label="예상 급여" value={`${formatCurrency(result.grossWage)}원`} highlight />
+          </View>
+          <View style={styles.netRow}>
+            <Text style={styles.netLabel}>예상 실수령액</Text>
+            <Text style={styles.netAmount}>{formatCurrency(salaryResult.netSalary)}원</Text>
+          </View>
         </View>
-        <View style={styles.netRow}>
-          <Text style={styles.netLabel}>예상 실수령액</Text>
-          <Text style={styles.netAmount}>{formatCurrency(salaryResult.netSalary)}원</Text>
-        </View>
-      </View>
+      )}
     </ScrollView>
   );
 }
@@ -221,4 +237,11 @@ const styles = StyleSheet.create({
   },
   netLabel: { fontSize: 15, fontWeight: '700', color: '#333' },
   netAmount: { fontSize: 17, fontWeight: '800', color: '#1a73e8' },
+  emptyBox: {
+    alignItems: 'center', padding: 32, margin: 12,
+    backgroundColor: '#fff', borderRadius: 14,
+  },
+  emptyIcon: { fontSize: 40, marginBottom: 12 },
+  emptyText: { fontSize: 15, fontWeight: '600', color: '#444', marginBottom: 6 },
+  emptyHint: { fontSize: 13, color: '#888', textAlign: 'center', lineHeight: 20 },
 });
