@@ -15,8 +15,8 @@ export function calcInsurance(taxableSalary: number): InsuranceResult {
   // 장기요양보험 = 건강보험료 × 12.95% (10원 단위 절사)
   const longTermCare = Math.floor((healthInsurance * INSURANCE_RATES.longTermCareRate) / 10) * 10;
 
-  // 고용보험
-  const employmentInsurance = Math.floor(taxableSalary * INSURANCE_RATES.employmentInsurance);
+  // 고용보험 (부동소수점 오차 방지: 원 단위 반올림)
+  const employmentInsurance = Math.round(taxableSalary * INSURANCE_RATES.employmentInsurance);
 
   const total = nationalPension + healthInsurance + longTermCare + employmentInsurance;
 

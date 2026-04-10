@@ -3,8 +3,18 @@ import { SeveranceInput, SeveranceResult } from './types';
 export function calcSeverance(input: SeveranceInput): SeveranceResult {
   const { joinDate, leaveDate, lastThreeMonthSalary, lastThreeMonthDays } = input;
 
+  // 빈 날짜 방어
+  if (!joinDate || !leaveDate) {
+    return { avgDailySalary: 0, workingDays: 0, severancePay: 0 };
+  }
+
   const join = new Date(joinDate);
   const leave = new Date(leaveDate);
+
+  // 유효하지 않은 날짜 방어
+  if (isNaN(join.getTime()) || isNaN(leave.getTime())) {
+    return { avgDailySalary: 0, workingDays: 0, severancePay: 0 };
+  }
 
   // 재직일수
   const workingDays = Math.floor((leave.getTime() - join.getTime()) / (1000 * 60 * 60 * 24));
