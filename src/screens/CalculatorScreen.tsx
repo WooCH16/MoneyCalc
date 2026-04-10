@@ -5,6 +5,7 @@ import {
 import { useSalaryStore } from '../stores/useSalaryStore';
 import { InputField } from '../components/common/InputField';
 import { ResultCard } from '../components/common/ResultCard';
+import { shareSalaryResult } from '../utils/shareResult';
 
 export function CalculatorScreen() {
   const {
@@ -112,9 +113,14 @@ export function CalculatorScreen() {
             totalAmount={result.netSalary}
           />
 
-          <TouchableOpacity style={styles.resetBtn} onPress={reset}>
-            <Text style={styles.resetBtnText}>초기화</Text>
-          </TouchableOpacity>
+          <View style={styles.actionRow}>
+            <TouchableOpacity style={styles.shareBtn} onPress={() => shareSalaryResult(result)}>
+              <Text style={styles.shareBtnText}>공유</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.resetBtn} onPress={reset}>
+              <Text style={styles.resetBtnText}>초기화</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     </ScrollView>
@@ -143,9 +149,15 @@ const styles = StyleSheet.create({
   },
   calcBtnText: { fontSize: 16, fontWeight: '700', color: '#fff' },
   resultSection: { paddingHorizontal: 12, paddingBottom: 32 },
+  actionRow: { flexDirection: 'row', gap: 8, marginTop: 4 },
+  shareBtn: {
+    flex: 1, height: 44, borderRadius: 10, backgroundColor: '#1a73e8',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  shareBtnText: { fontSize: 14, color: '#fff', fontWeight: '600' },
   resetBtn: {
-    height: 44, borderRadius: 10, borderWidth: 1, borderColor: '#ddd',
-    alignItems: 'center', justifyContent: 'center', marginTop: 4,
+    flex: 1, height: 44, borderRadius: 10, borderWidth: 1, borderColor: '#ddd',
+    alignItems: 'center', justifyContent: 'center',
   },
   resetBtnText: { fontSize: 14, color: '#888' },
 });
