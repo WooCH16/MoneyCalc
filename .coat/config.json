@@ -1,7 +1,7 @@
 {
   "github": {
-    "enabled": false,
-    "repo": "",
+    "enabled": true,
+    "repo": "WooCH16/MoneyCalc",
     "auto_issue": true,
     "auto_branch": true,
     "auto_pr": true
