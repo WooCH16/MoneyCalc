@@ -17,8 +17,9 @@ export function InputField({ label, value, onChangeText, placeholder, suffix, ke
     onChangeText(numeric);
   };
 
-  // 표시값: 콤마 포맷
-  const displayValue = value ? parseInt(value, 10).toLocaleString('ko-KR') : '';
+  // 표시값: 콤마 포맷 (빈 값 또는 NaN 방어)
+  const numericVal = parseInt(value, 10);
+  const displayValue = value && !isNaN(numericVal) ? numericVal.toLocaleString('ko-KR') : '';
 
   return (
     <View style={styles.container}>

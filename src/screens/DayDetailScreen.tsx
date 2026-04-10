@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
-  Modal, FlatList,
+  Modal, FlatList, Alert,
 } from 'react-native';
 import { useScheduleStore } from '../stores/useScheduleStore';
 import { useSettingsStore } from '../stores/useSettingsStore';
@@ -105,16 +105,28 @@ export function DayDetailScreen({ date, onClose }: Props) {
     ? analyzeDayWork({ date, type: workType, startTime, endTime, breakMinutes: breakMins }, dailyWorkHours)
     : null;
 
+  function timeToMin(t: string) {
+    const [h, m] = t.split(':').map(Number);
+    return h * 60 + m;
+  }
+
   function save() {
     if (workType === 'off') {
       removeDayWork(date);
-    } else {
-      const work: DayWork = {
-        date, type: workType,
-        ...(needsTime ? { startTime, endTime, breakMinutes: breakMins } : {}),
-      };
-      setDayWork(date, work);
+      onClose();
+      return;
     }
+    // 시간 유효성: 출근 >= 퇴근이면 익일 근무로 허용 (자정 넘김)
+    // 단, 같은 시간이면 경고
+    if (needsTime && startTime === endTime) {
+      Alert.alert('시간 오류', '출근 시간과 퇴근 시간이 같습니다.');
+      return;
+    }
+    const work: DayWork = {
+      date, type: workType,
+      ...(needsTime ? { startTime, endTime, breakMinutes: breakMins } : {}),
+    };
+    setDayWork(date, work);
     onClose();
   }
 
