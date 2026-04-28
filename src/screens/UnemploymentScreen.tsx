@@ -4,6 +4,7 @@ import { useUnemploymentStore } from '../stores/useUnemploymentStore';
 import { InputField } from '../components/common/InputField';
 import { ResultCard } from '../components/common/ResultCard';
 import { formatCurrency } from '../utils/formatters';
+import { shareUnemploymentResult } from '../utils/shareResult';
 
 export function UnemploymentScreen() {
   const { input, result, setAvgDailySalary, setAge, setInsuredMonths, calculate, reset } =
@@ -68,9 +69,14 @@ export function UnemploymentScreen() {
             <Text style={[styles.tableText, { marginTop: 8 }]}>{'50세 이상 / 장애인\n• 1년 미만: 120일\n• 1~3년: 180일\n• 3~5년: 210일\n• 5~10년: 240일\n• 10년 이상: 270일'}</Text>
           </View>
 
-          <TouchableOpacity style={styles.resetBtn} onPress={reset}>
-            <Text style={styles.resetBtnText}>초기화</Text>
-          </TouchableOpacity>
+          <View style={styles.actionRow}>
+            <TouchableOpacity style={styles.shareBtn} onPress={() => shareUnemploymentResult(result)}>
+              <Text style={styles.shareBtnText}>공유</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.resetBtn} onPress={reset}>
+              <Text style={styles.resetBtnText}>초기화</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     </ScrollView>
@@ -102,8 +108,14 @@ const styles = StyleSheet.create({
   tableBox: { backgroundColor: '#f8faff', borderRadius: 12, padding: 14, marginBottom: 12 },
   tableTitle: { fontSize: 13, fontWeight: '700', color: '#333', marginBottom: 8 },
   tableText: { fontSize: 12, color: '#555', lineHeight: 20 },
+  actionRow: { flexDirection: 'row', gap: 8 },
+  shareBtn: {
+    flex: 1, height: 44, borderRadius: 10, backgroundColor: '#1a73e8',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  shareBtnText: { fontSize: 14, color: '#fff', fontWeight: '600' },
   resetBtn: {
-    height: 44, borderRadius: 10, borderWidth: 1, borderColor: '#ddd',
+    flex: 1, height: 44, borderRadius: 10, borderWidth: 1, borderColor: '#ddd',
     alignItems: 'center', justifyContent: 'center',
   },
   resetBtnText: { fontSize: 14, color: '#888' },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 interface Props {
@@ -11,20 +11,20 @@ interface Props {
 }
 
 export function InputField({ label, value, onChangeText, placeholder, suffix, keyboardType = 'numeric' }: Props) {
+  const [focused, setFocused] = useState(false);
+
   const handleChange = (text: string) => {
-    // 숫자만 허용, 콤마 제거 후 전달
     const numeric = text.replace(/[^0-9]/g, '');
     onChangeText(numeric);
   };
 
-  // 표시값: 콤마 포맷 (빈 값 또는 NaN 방어)
   const numericVal = parseInt(value, 10);
   const displayValue = value && !isNaN(numericVal) ? numericVal.toLocaleString('ko-KR') : '';
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
-      <View style={styles.inputRow}>
+      <Text style={[styles.label, focused && styles.labelFocused]}>{label}</Text>
+      <View style={[styles.inputRow, focused && styles.inputRowFocused]}>
         <TextInput
           style={styles.input}
           value={displayValue}
@@ -32,6 +32,8 @@ export function InputField({ label, value, onChangeText, placeholder, suffix, ke
           placeholder={placeholder ?? '0'}
           placeholderTextColor="#aaa"
           keyboardType={keyboardType}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
         />
         {suffix && <Text style={styles.suffix}>{suffix}</Text>}
       </View>
@@ -42,6 +44,7 @@ export function InputField({ label, value, onChangeText, placeholder, suffix, ke
 const styles = StyleSheet.create({
   container: { marginBottom: 12 },
   label: { fontSize: 14, color: '#555', marginBottom: 4 },
+  labelFocused: { color: '#1a73e8' },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -50,6 +53,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 12,
     backgroundColor: '#fafafa',
+  },
+  inputRowFocused: {
+    borderColor: '#1a73e8',
+    backgroundColor: '#fff',
   },
   input: {
     flex: 1,

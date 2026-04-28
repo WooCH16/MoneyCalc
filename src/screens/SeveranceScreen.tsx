@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal,
+  View, Text, StyleSheet, ScrollView, TouchableOpacity,
 } from 'react-native';
 import { useSeveranceStore } from '../stores/useSeveranceStore';
 import { InputField } from '../components/common/InputField';
 import { ResultCard } from '../components/common/ResultCard';
-import { formatCurrency, formatDate } from '../utils/formatters';
+import { formatCurrency } from '../utils/formatters';
+import { shareSeveranceResult } from '../utils/shareResult';
 
 // 간단한 날짜 선택기 (연/월/일 슬라이더 대신 텍스트 입력)
 function DateInput({ label, value, onChange }: {
@@ -110,9 +111,22 @@ export function SeveranceScreen() {
             </>
           )}
 
-          <TouchableOpacity style={styles.resetBtn} onPress={reset}>
-            <Text style={styles.resetBtnText}>초기화</Text>
-          </TouchableOpacity>
+          <View style={styles.actionRow}>
+            {result.severancePay > 0 && (
+              <TouchableOpacity
+                style={styles.shareBtn}
+                onPress={() => shareSeveranceResult(result, input.joinDate, input.leaveDate)}
+              >
+                <Text style={styles.shareBtnText}>공유</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity
+              style={[styles.resetBtn, result.severancePay > 0 && styles.resetBtnHalf]}
+              onPress={reset}
+            >
+              <Text style={styles.resetBtnText}>초기화</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     </ScrollView>
@@ -145,9 +159,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff3cd', borderRadius: 12, padding: 16, marginBottom: 12,
   },
   noPayText: { fontSize: 14, color: '#856404', lineHeight: 22, textAlign: 'center' },
+  actionRow: { flexDirection: 'row', gap: 8 },
+  shareBtn: {
+    flex: 1, height: 44, borderRadius: 10, backgroundColor: '#1a73e8',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  shareBtnText: { fontSize: 14, color: '#fff', fontWeight: '600' },
   resetBtn: {
     height: 44, borderRadius: 10, borderWidth: 1, borderColor: '#ddd',
     alignItems: 'center', justifyContent: 'center',
   },
+  resetBtnHalf: { flex: 1 },
   resetBtnText: { fontSize: 14, color: '#888' },
 });

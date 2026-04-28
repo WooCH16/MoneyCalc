@@ -8,6 +8,7 @@ import { calcMonthSchedule } from '../utils/scheduleCalc';
 import { calcSalary } from '../utils/salaryCalc';
 import { DayCell } from '../components/schedule/DayCell';
 import { formatCurrency, formatMinutes } from '../utils/formatters';
+import { shareScheduleResult } from '../utils/shareResult';
 
 const WEEKDAY_LABELS = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -175,6 +176,12 @@ export function ScheduleScreen({ onDayPress }: Props) {
             <Text style={styles.netLabel}>예상 실수령액</Text>
             <Text style={styles.netAmount}>{formatCurrency(salaryResult.netSalary)}원</Text>
           </View>
+          <TouchableOpacity
+            style={styles.shareBtn}
+            onPress={() => shareScheduleResult(yearMonth, result, salaryResult.netSalary)}
+          >
+            <Text style={styles.shareBtnText}>공유</Text>
+          </TouchableOpacity>
         </View>
       )}
     </ScrollView>
@@ -237,6 +244,11 @@ const styles = StyleSheet.create({
   },
   netLabel: { fontSize: 15, fontWeight: '700', color: '#333' },
   netAmount: { fontSize: 17, fontWeight: '800', color: '#1a73e8' },
+  shareBtn: {
+    marginTop: 12, height: 44, borderRadius: 10, backgroundColor: '#1a73e8',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  shareBtnText: { fontSize: 14, color: '#fff', fontWeight: '600' },
   emptyBox: {
     alignItems: 'center', padding: 32, margin: 12,
     backgroundColor: '#fff', borderRadius: 14,
