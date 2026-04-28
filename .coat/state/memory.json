@@ -1,13 +1,13 @@
 {
   "feature": "급여자동계산기",
-  "phase": "design",
+  "phase": "cast",
   "round": 0,
   "matchRate": {
     "기능": 0,
     "UX": 0,
     "속도": 0
   },
-  "team": [],
+  "team": ["기획자", "개발자", "검증자", "UX 전문가"],
   "architecture": "MVVM + Zustand",
   "updatedAt": "2026-04-10"
 }
